@@ -1,0 +1,588 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en-us" xml:lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="security" content="public" />
+<meta name="Robots" content="index,follow" />
+<meta http-equiv="PICS-Label"
+	content='(PICS-1.1 "http://www.icra.org/ratingsv02.html" l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) "http://www.rsac.org/ratingsv01.html" l gen true r (n 0 s 0 v 0 l 0) "http://www.classify.org/safesurf/" l gen true r (SS~~000 1))' />
+<meta name="DC.Type" content="task" />
+<meta name="DC.Title"
+	content="Web Services Business Activity (WS-BA) sample" />
+<meta name="abstract"
+	content="The Web Services Business Activity (WS-BA) technology for WebSphere Application Server enables support for the implementation of web services that follow the WS-BA specifications." />
+<meta name="description"
+	content="The Web Services Business Activity (WS-BA) technology for WebSphere Application Server enables support for the implementation of web services that follow the WS-BA specifications." />
+<meta name="DC.Coverage" content="sample" />
+<meta name="DC.Relation" scheme="URI" content="twbs_wsspsptran.html" />
+<meta name="DC.Relation" scheme="URI" content="uwbs_wsspstran.html" />
+<meta name="DC.Relation" scheme="URI" content="cjta_wsba.html" />
+<meta name="DC.Audience.Job" content="programming" />
+<meta name="DC.Audience.Type" content="programmer" />
+<meta name="prodname" content="IBM WebSphere Application Server" />
+<meta name="version" content="matt" />
+<meta name="modification" content="was8001+" />
+<meta name="component" content="was-base was-express was-nd" />
+<meta name="platform" content="dist iseries zos" />
+<meta name="copyright" content="IBM Corporation 2010" />
+<meta name="DC.Rights.Owner" content="IBM Corporation 2010" />
+<meta name="DC.Format" content="XHTML" />
+<meta name="DC.Identifier" content="wsba_sample" />
+<meta name="DC.Language" content="en-us" />
+<!-- All rights reserved. Licensed Materials Property of IBM -->
+<!-- US Government Users Restricted Rights -->
+<!-- Use, duplication or disclosure restricted by -->
+<!-- GSA ADP Schedule Contract with IBM Corp. -->
+<link rel="stylesheet" type="text/css" href="style/samples_readme.css"/>
+<title>Web Services Business Activity (WS-BA) sample</title>
+</head>
+<body id="wsba_sample">
+<a name="wsba_sample"><!-- --></a>
+
+<div id="sample_header">
+	<img class="sample_header_icon_left" alt="WebSphere software logo" src="images/WS_BrandMark_18x120.png"/>
+	<img class="sample_header_icon_right" alt="IBM Logo" src="images/ibm-logo-white.gif"/>
+</div>
+
+
+<h1 class="topictitle1">Web Services Business Activity (WS-BA)
+sample</h1>
+
+
+
+
+<div>
+<p>The Web Services Business Activity (WS-BA) technology for
+WebSphere Application Server enables support for the implementation of
+web services that follow the WS-BA specifications.</p>
+
+<div class="section">
+<div class="p">
+<dl>
+	<dt ><h4 class="sectiontitle">Time required to set up and configure this
+	sample</h4></dt>
+
+	<dd>
+	<p>1 hour</p>
+	</dd>
+
+
+	<dt><h4 class="sectiontitle">Prerequisites</h4></dt>
+
+	<dd>
+	<ul>
+		<li>To run the sample application you must have a WebSphere
+		Application Server version 8.0 installation with a profile containing
+		a single stand-alone application server.</li>
+
+		<li>This sample was tested most recently with WebSphere
+		Application Server Version 8.0.</li>
+
+		<li>The procedure in this topic contains instructions for Windows
+		platforms only. To run this sample on a UNIX platform, complete the
+		following actions when completing this task:
+		<ul>
+			<li>Substitute the Windows batch file (<samp>.bat</samp>) file
+			extension with the UNIX shell script (<samp>.sh</samp>) file
+			extension.</li>
+
+			<li>Substitute Windows path names with the appropriate, fully
+			qualified, UNIX path names. For example, replace <samp>\</samp>, used
+			in Windows, with <samp>/</samp>, used in UNIX.</li>
+
+		</ul>
+		</li>
+
+	</ul>
+	</dd>
+
+</dl>
+</div>
+	<div class="section">
+		<h4 class="sectiontitle">
+		Copyright license</h4>
+
+			<p>COPYRIGHT LICENSE: This information contains sample code provided in source code form. You may copy, modify, and distribute these sample programs in any form without payment to IBM for the purposes of developing, using, marketing or distributing application programs conforming to the application programming interface for the operating platform for which the sample code is written. Notwithstanding anything to the contrary, IBM PROVIDES THE SAMPLE SOURCE CODE ON AN "AS IS" BASIS AND IBM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, ANY IMPLIED WARRANTIES OR CONDITIONS OF MERCHANTABILITY, SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND ANY WARRANTY OR CONDITION OF NON-INFRINGEMENT. IBM SHALL NOT BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR OPERATION OF THE SAMPLE SOURCE CODE. IBM HAS NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR MODIFICATIONS TO THE SAMPLE SOURCE CODE.</p>
+
+	</div>
+
+
+</div>
+
+<div class="section">
+	<h4 class="sectiontitle">
+	About this task</h4>
+
+<div class="section">
+<div class="p">There is one basic scenario and one intermediate
+scenario in this sample.
+<dl>
+	<dt >Basic Scenario</dt>
+
+	<dd>
+	<p>The basic scenario demonstrates how WS-BA compensation handling
+	can be used to generate an email notification when an email fails to be
+	delivered due to a business exception error. You have the option to
+	cause an exception error in order to test the configuration.</p>
+	</dd>
+
+
+	<dt >Intermediate Scenario</dt>
+
+	<dd>
+	<p>The intermediate scenario demonstrates how WS-BA compensation
+	handling can be used when a process carries out two transactions.</p>
+	<div class="p">The first transaction is booking a flight. There
+	are two service providers for this transaction:
+	<ul>
+		<li>Flight Provider A</li>
+
+		<li>Flight Provider B</li>
+
+	</ul>
+	If Flight Provider A returns an error, WS-BA compensation handling
+	attempts to complete the booking by using Flight Provider B. If both
+	Flight Providers return an error, a cancelation email is generated.</div>
+	<div class="p">The second transaction is booking a hotel. There
+	are two service providers for this transaction:
+	<ul>
+		<li>Hotel Provider A</li>
+
+		<li>Hotel Provider B</li>
+
+	</ul>
+	If Hotel Provider A returns an error, WS-BA compensation handling
+	attempts to complete the booking by using Hotel Provider B. If both
+	Hotel Providers return an error, a cancelation email is generated.</div>
+	<p>When both booking transactions are complete, the travel agent
+	can decide not to confirm the booking. In this case, the transactions
+	are rolled back and cancelation emails are generated for each booking.</p>
+	<div class="p">There are four pre-configured setups and one
+	custom setup for you to test:
+	<dl>
+
+		<dt class="dlterm">Preconfigured setup A</dt>
+
+		<dd>In this setup Flight Provider A is unable to process the booking
+        request. Instead, the application books the flight with Flight Provider
+        B. It then books the hotel successfully with Hotel Provider A. This
+        test shows how WS-BA support overcomes minor failure during transaction
+        processing, by finding an alternative service provider when the first
+        service provider has failed.</dd>
+
+
+		<dt class="dlterm">Preconfigured setup B</dt>
+
+		<dd>In this setup Flight Provider A produces an exception error, so
+        the application books the flight with Flight Provider B. Hotel Provider
+        A produces an exception error, so the application books the hotel
+        with Hotel Provider B. This test shows how WS-BA support overcomes
+        a minor failure during a business activity, by finding an alternative
+        provider for booking the hotel, despite the fact that one transaction
+       (booking the flight) has already been completed.</dd>
+
+
+		<dt class="dlterm">Preconfigured setup C</dt>
+
+		<dd>In this setup both flight providers and both hotel providers return
+        errors and no transactions are completed. The application generates
+        two cancelation emails detailing that no flight or hotel were booked.
+        This setup shows the compensation handling aspect of WS-BA. When a
+        transaction fails, the application compensates by generating a cancelation
+        email, which can warn the appropriate person about the error.</dd>
+
+
+		<dt class="dlterm">Preconfigured setup D</dt>
+
+		<dd>In this setup, the application successfully books a flight with
+        Flight Provider A and a hotel room with Hotel Provider A. However,
+        the travel agent decides not to confirm the bookings, so the transactions
+        are rolled back. The WS_BA compensation service cancels the flight
+        and hotel bookings and generates two cancelation emails. This setup
+        shows how WS-BA compensation handling can be used to roll back the
+        work completed under two transactions after an input from an external
+        source.</dd>
+
+	</dl>
+	<dl>
+		<dt class="dlterm">Custom configuration</dt>
+
+		<dd class="dldescription">In the custom configuration you can choose what parts of the
+		system, if any, produce an error. You can also choose whether the
+		travel agent confirms the booking or not. You can test the
+		configuration and see how WS-BA compensates for any errors that occur.</dd>
+
+	</dl>
+	</div>
+	</dd>
+
+</dl>
+</div>
+</div>
+
+</div>
+
+<div class="section">
+	<h4 class="sectiontitle">
+	Procedure </h4>
+
+	<div class="dldescription">
+		<p class="subsection">
+			Extracting the sample</p>
+		<ol>
+		<li><span>Download the <samp>WSBASample.zip</samp> file.</li>
+				<li> Extract the contents to a suitable directory, for example, <samp>C:\temp\WSBASample</samp>.
+				This directory is referred to as the <samp>install_root</samp>
+				directory in the subsequent steps of this task.</span>The <samp>WSBASample.zip</samp>
+				is unpacked into the following directories:
+				<div class="tablenoborder">
+				<table cellpadding="4" cellspacing="0" summary="" frame="border"
+					border="1" rules="all">
+					<caption>Table 1. Install directories for <samp>WSBASample.zip</samp>.
+					The table shows the file path for the installation directories of <samp>WSBASample.zip</samp>
+					on the left and shows the contents of each directory on the right.</caption>
+					<thead align="left">
+						<tr valign="bottom">
+							<th valign="bottom" id="N65967">Directory</th>
+
+							<th valign="bottom" id="N65973">Contents of the directory</th>
+
+						</tr>
+
+					</thead>
+
+					<tbody>
+						<tr>
+							<td valign="top" headers="N65967 "><samp>install_root\docs
+							</samp></td>
+
+							<td valign="top" headers="N65973 ">Documentation for the WS-BA
+							sample.</td>
+
+						</tr>
+
+						<tr>
+							<td valign="top" headers="N65967 "><samp>install_root\src
+							</samp></td>
+
+							<td valign="top" headers="N65973 ">Source code for the WS-BA
+							sample.</td>
+
+						</tr>
+
+						<tr>
+							<td valign="top" headers="N65967 "><samp>install_root\installableApps
+							</samp></td>
+
+							<td valign="top" headers="N65973 ">Files for the WS-BA sample:
+							<samp>WSBASample.ear</samp>;<samp>WSBASampleWeb.war</samp> and <samp>WSBASampleEJB.jar</samp>.</td>
+
+						</tr>
+
+						<tr>
+							<td valign="top" headers="N65967 "><samp>install_root\scripts</samp>
+							</td>
+
+							<td valign="top" headers="N65973 ">The script for rebuilding
+							the sample: <samp>buildWSBASample.bat</samp>, and the scripts for
+							setting up the WebSphere Application Server environment: <samp>setupWAS.jacl</samp>
+							and <samp>install.jacl</samp>.</td>
+
+						</tr>
+
+					</tbody>
+
+				</table>
+				</div>
+				</li>
+		</ol>
+
+		<p class="subsection">
+		Configuring the WebSphere Application Server environment
+		</p>
+		<span>To configure your WebSphere Application Server environment
+to work with the sample application, complete the following steps:</span>
+
+		<ol>
+				<li>Stop the application server.</li>
+
+				<li>In the command-line, navigate to <samp><span
+					class="keyword">profile_root</span>\bin</samp>. The <samp><span
+					class="keyword">profile_root</span></samp> directory is the directory where
+				you have installed your application server profile. For example: <samp>C:\Program
+				Files\IBM\WebSphere\AppServer\profiles\AppSrv01</samp>.</li>
+
+				<li>Check whether the PATH environment variable includes <samp><span
+					class="keyword">profile_root</samp>\bin</span>.
+				<ul>
+					<li>To see the contents of your PATH environment variable, enter
+					<samp>set path</samp> into the command-line.</li>
+
+					<li>If <samp>profile_root\bin</samp> is not listed in the PATH
+					result, enter <samp>set path= profile_root\bin;%PATH%</samp> into the
+					command-line. Specifying this tells the command line where the <samp>wsadmin.bat</samp>
+					file is located, so that it can start wsadmin scripting.</li>
+
+				</ul>
+				</li>
+
+				<li>Navigate to <samp>install_root\scripts</samp> in the
+				command-line.</li>
+
+				<li>Enter <samp>wsadmin.bat -conntype none -f
+				setupWAS.jacl</samp> into the command-line. The <samp>setupWAS.jacl</samp>
+				script completes the following actions:
+				<ol type="a">
+					<li>Creates a JDBC XA provider</li>
+
+					<li>Creates a data source on the provider</li>
+
+					<li>Enables the compensation service on the application server</li>
+
+					<li>Creates an application policy set that supports
+					WS-Transaction</li>
+
+				</ol>
+				</li>
+
+			</ol>
+
+
+
+	 <p class="subsection">
+		Installing the sample</p>
+		<span>To install the sample application, complete the following
+steps:</span>
+	<ol>
+		<li>Enter <samp>wsadmin.bat -conntype none -f install.jacl</samp>
+		into the wsadmin command line. The <samp>install.jacl</samp> script
+		completes the following actions:
+		<ol type="a">
+			<li>Installs the WS-BA sample application: <samp>WSBASample.ear</samp>.</li>
+
+			<li>Attaches the policy set created by <samp>setupWAS.jacl</samp>
+			to the web service providers and service clients of the WSBASample
+			application.</li>
+
+		</ol>
+		</li>
+
+	</ol>
+
+
+	<p class="subsection">
+		Rebuilding the sample</p>
+	<span>If you need to tailor the application to work
+	with your WebSphere Application Server environment, you can rebuild the
+	sample application by completing the following steps:</span>
+	<ol>
+		<li>First make a backup copy the <samp><span
+			class="keyword">install_root</span></samp> directory.</li>
+
+		<li>Navigate to the <samp><span class="keyword">install_root</span>\src</samp>
+		directory and rebuild the WS-BA sample EAR files.</li>
+
+		<li>Check whether the PATH environment variable includes <samp><span
+			class="keyword">profile_root</span>\bin</samp>.
+		<ul>
+			<li>To see the contents of your PATH environment variable, enter
+			<samp>set path</samp> into the command-line.</li>
+
+			<li>If <samp>profile_root\bin</samp> is not listed in the PATH
+			result, enter <samp>set path= profile_root\bin;%PATH%</samp> into the
+			command-line. Specifying this tells the command line where the <samp>wsadmin.bat</samp>
+			file is located, so that it can start wsadmin scripting.</li>
+
+		</ul>
+		</li>
+
+		<li>Navigate to <samp><span class="keyword">install_root</span>\scripts</samp>
+		in the command-line interpreter.</li>
+
+		<li>Enter the following wsadmin command: <samp><span
+			class="keyword">install_root</span>\scripts\buildWSBASample.bat</samp>. The
+		script sets the appropriate class path information and starts the Ant
+		build utility. The Ant utility reads the <samp>build.xml</samp> files,
+		which describe how to build the samples.</li>
+
+	</ol>
+
+	<p class="subsection">
+
+		Uninstalling the sample</p>
+	<span>To remove the WS-BA sample, complete the
+	following actions:</span>
+	<ol>
+		<li>Stop the application server.</li>
+
+		<li>Check whether the PATH environment variable includes <samp><span
+			class="keyword">profile_root</span>\bin</samp>. To see the contents of your
+		PATH environment variable, enter <samp>set path</samp> into the
+		command-line.</li>
+
+		<li>Check whether the PATH environment variable includes <samp><span
+			class="keyword">profile_root</span>\bin</samp>.
+		<ul>
+			<li>To see the contents of your PATH environment variable, enter
+			<samp>set path</samp> into the command-line.</li>
+
+			<li>If <samp>profile_root\bin</samp> is not listed in the PATH
+			result, enter <samp>set path= profile_root\bin;%PATH%</samp> into the
+			command-line. Specifying this tells the command line where the <samp>wsadmin.bat</samp>
+			file is located, so that it can start wsadmin scripting.</li>
+
+		</ul>
+		</li>
+
+		<li>Enter <samp>wsadmin.bat -conntype none -c "$AdminApp
+		uninstall WSBASample"</samp> into the command-line interpreter.</li>
+
+		<li>Start the application server.</li>
+
+	</ol>
+
+	</div>
+
+  </div>
+
+  <div class="section">
+  	<h4 class="sectiontitle">
+  	  Results </h4>
+
+		<div class="dldescription">
+
+		 <p class="subsection">
+		Accessing the WS-BA scenario interface</p>
+	<ol>
+		<li>To access the WS-BA sample interface, enter <samp>http://<span
+			class="keyword">server_hostname</span>:9080/WSBASampleWeb</samp> into your
+		web browser, where <span><span class="keyword">server_hostname</span></span>
+		is replaced with the name of the server host you are using.</li>
+
+		<li>The Web Services-Business Activity Sample welcome page is
+		displayed. On the upper part of the screen there are two options, <span class="bold">Basic
+		Scenario</span> and <span class="bold">Intermediate Scenario</span>. On the lower part of
+		the screen there is a display showing information in the sample
+		database. When the sample is run, output information is displayed
+		here.</li>
+
+	</ol>
+	</li>
+
+	<p class="subsection">Running the Basic Scenario</p>
+	<ol>
+		<li>On the Web Services-Business Activity Sample welcome page,
+		click <span class="bold">Basic Scenario</span>. The Scenario Description page is
+		displayed.</li>
+
+		<li>On the Scenario Description page, click <span  class="bold">Configure
+		and run the scenario</span>. The Basic Scenario Configuration page is
+		displayed.</li>
+
+		<li>To test the configuration without an exception error, enter a
+		name into the <span class="bold">Customer name</span> field and
+		click <span  class="bold">Finish</span>. On the upper part of the screen, a process
+		log is displayed.</li>
+
+		<li>On the lower part of the screen click <span  class="bold">emails</span>,
+		then click <span  class="bold">Refresh</span>. A booking confirmation email is
+		displayed in the database.</li>
+
+		<li>To clear the inbox for the next test, click <span  class="bold">Clear
+		inbox</span>.</li>
+
+		<li>To test the configuration with an exception error, enter a
+		name into the <span class="bold">Customer name</span> field, select
+		the <span>Throw business exception in travel agent bean</span> check
+		box and then click <span  class="bold">Finish</span>. On the upper part of the
+		screen, the process log is displayed.</li>
+
+		<li>On the lower part of the screen click <span  class="bold">emails</span>,
+		then click <span  class="bold">Refresh</span>. Two emails are displayed in the
+		database, one confirmation email and one cancelation email. The
+		cancelation email is generated by the WS-BA application to compensate
+		for the exception error.</li>
+
+		<li>To clear the inbox for the next test, click <span  class="bold">Clear
+		inbox</span>.</li>
+
+	</ol>
+	</li>
+
+	<p class="subsection">Running the Intermediate Scenario</p>
+	<ol>
+		<li>On the Web Services-Business Activity Sample welcome page,
+		click <span  class="bold">Intermediate Scenario</span>. The Scenario Description
+		page is displayed.</li>
+
+		<li>On the Scenario Description page, click <span  class="bold">Configure
+		and run the scenario</span>. The Intermediate Scenario Configuration page is
+		displayed.</li>
+
+		<li>Test any of the pre-configured setups by clicking the
+		appropriate <span  class="bold">Run Setup</span> button. When a setup is run, a
+		process log is displayed on the upper part of the screen.</li>
+
+		<li>To test a custom configuration, scroll down to the Custom
+		Configuration section and complete the following steps:
+		<ol type="a">
+			<li>Enter a name in the <span  class="bold">Customer name</span> field.</li>
+
+			<li>Select which flight provider, if any, that you want to be
+			operational for the test.</li>
+
+			<li>Select which hotel provider, if any, that you want to be
+			operational for the test.</li>
+
+			<li>If you want the transactions to be rolled back at the end of
+			the test select the <span  class="bold">Throw business exception in travel
+			agent bean upon confirmation of bookings</span> check box.</li>
+
+			<li>Click <span  class="bold">Finish</span>. The setup runs and a process log
+			is displayed on the upper part of the screen.</li>
+
+		</ol>
+		</li>
+
+		<li>To see which transactions have been successfully completed,
+		click <span  class="bold">live tables</span>, then click <span  class="bold">Refresh</span>. The
+		database shows which flights and hotels have been booked.</li>
+
+		<li>To see the confirmation and cancelation emails that have been
+		generated by the test, click <span  class="bold">emails</span>, then click <span  class="bold">Refresh</span>.</li>
+
+	</ol>
+	</li>
+
+</ul>
+</div>
+
+</div>
+
+</body>
+
+<div class="section">
+     <h4 class="sectiontitle">
+     Related Links </h4>
+
+	 <div>
+
+
+
+<ul>
+
+         <li><a href="http://www14.software.ibm.com/webapp/wsbroker/redirect?version=matt&product=was-nd-mp&topic=twbs_wsspsptran">Configuring the WS-Transaction policy</a></li>
+
+         <li><a href="http://www14.software.ibm.com/webapp/wsbroker/redirect?version=matt&product=was-nd-mp&topic=uwbs_wsspstran">WS-Transaction policy settings</a></li>
+
+         <li><a href="http://www14.software.ibm.com/webapp/wsbroker/redirect?version=matt&product=was-nd-mp&topic=cjta_wsba">Web Services Business Activity support in the application server</a></li>
+
+</ul>
+
+
+</div>
+
+</div>
+
+</html>

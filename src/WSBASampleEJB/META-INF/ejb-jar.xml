@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar id="ejb-jar_ID" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_0.xsd">
+	<display-name>
+	WSBASampleEJB</display-name>
+	<enterprise-beans>
+		<session id="TravelAgent">
+			<ejb-name>TravelAgent</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.TravelAgentBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547218">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="FlightProviderA">
+			<ejb-name>FlightProviderA</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.FlightProviderABean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547234">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="FlightProviderB">
+			<ejb-name>FlightProviderB</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.FlightProviderBBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547235">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="HotelProviderA">
+			<ejb-name>HotelProviderA</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.HotelProviderABean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547390">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="HotelProviderB">
+			<ejb-name>HotelProviderB</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.HotelProviderBBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547406">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="FlightProviderAEMail">
+			<ejb-name>FlightProviderAEMail</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.FlightProviderAEMailBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547421">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="FlightProviderBEMail">
+			<ejb-name>FlightProviderBEMail</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.FlightProviderBEMailBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547437">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="HotelProviderAEMail">
+			<ejb-name>HotelProviderAEMail</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.HotelProviderAEMailBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547438">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="HotelProviderBEMail">
+			<ejb-name>HotelProviderBEMail</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.HotelProviderBEMailBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547453">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="MockEMailServer">
+			<ejb-name>MockEMailServer</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.MockEMailServerBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547516">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+		<session id="CustomerDataHelper">
+			<ejb-name>CustomerDataHelper</ejb-name>
+			<ejb-class>com.ibm.websphere.wsba.sample.CustomerDataHelperBean</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+			<resource-ref id="ResourceRef_1146046547515">
+				<description>
+				</description>
+				<res-ref-name>WSBASampleDB</res-ref-name>
+				<res-type>javax.sql.DataSource</res-type>
+				<res-auth>Container</res-auth>
+				<res-sharing-scope>Shareable</res-sharing-scope>
+			</resource-ref>
+		</session>
+	</enterprise-beans>
+</ejb-jar>

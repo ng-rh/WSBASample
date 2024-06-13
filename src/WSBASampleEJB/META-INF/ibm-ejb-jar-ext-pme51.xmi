@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pmeext:PME51EJBJarExtension xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ejb="ejb.xmi" xmlns:pmeext="http://www.ibm.com/websphere/appserver/schemas/5.0/pmeext.xmi" xmi:id="PME51EJBJarExtension_1140779593589">
+  <compensationEJBJarExtension xmi:id="CompensationEJBJarExtension_1140779593589">
+    <ejbJarExtension href="ejbModule/ejbModule/META-INF/ibm-ejb-jar-ext.xmi#EJBJarExtension_1140779593589"/>
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1140779593589" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1140779593589" className="com.ibm.ws.wsba.handlers.ScenarioACompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#TravelAgent"/>
+    </compensationBeanPolicies>
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141212019213" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141212019213" className="com.ibm.ws.wsba.handlers.ScenarioBFlightProviderACompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#FlightProviderA"/>
+    </compensationBeanPolicies>
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141212019214" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141212019214" className="com.ibm.ws.wsba.handlers.ScenarioBFlightProviderBCompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#FlightProviderB"/>
+    </compensationBeanPolicies>
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141212037510" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141212037509" className="com.ibm.ws.wsba.handlers.ScenarioBHotelProviderACompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#HotelProviderA"/>
+    </compensationBeanPolicies>    
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141212037510" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141212037509" className="com.ibm.ws.wsba.handlers.ScenarioBHotelProviderBCompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#HotelProviderB"/>
+    </compensationBeanPolicies>    
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141242019213" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141242019213" className="com.ibm.ws.wsba.handlers.ScenarioBFlightProviderAEMailCompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#FlightProviderAEMail"/>
+    </compensationBeanPolicies>
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141242019214" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141242019214" className="com.ibm.ws.wsba.handlers.ScenarioBFlightProviderBEMailCompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#FlightProviderBEMail"/>
+    </compensationBeanPolicies>
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141242037510" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141242037509" className="com.ibm.ws.wsba.handlers.ScenarioBHotelProviderAEMailCompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#HotelProviderAEMail"/>
+    </compensationBeanPolicies>    
+    <compensationBeanPolicies xmi:id="CompensationBeanPolicy_1141242037510" compensationKind="Required">
+      <compensationHandler xmi:id="CompensationHandler_1141242037509" className="com.ibm.ws.wsba.handlers.ScenarioBHotelProviderBEMailCompensationHandler"/>
+      <enterpriseBean xmi:type="ejb:Session" href="META-INF/ejb-jar.xml#HotelProviderBEMail"/>
+    </compensationBeanPolicies>  
+  </compensationEJBJarExtension>
+</pmeext:PME51EJBJarExtension>

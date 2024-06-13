@@ -1,0 +1,310 @@
+# COPYRIGHT LICENSE: This information contains sample code provided in 
+# source code form. You may copy, modify, and distribute these sample 
+# programs in any form without payment to IBM for the purposes of 
+# developing, using, marketing or distributing application programs 
+# conforming to the application programming interface for the operating 
+# platform for which the sample code is written. Notwithstanding anything 
+# to the contrary, IBM PROVIDES THE SAMPLE SOURCE CODE ON AN "AS IS" BASIS 
+# AND IBM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT 
+# LIMITED TO, ANY IMPLIED WARRANTIES OR CONDITIONS OF MERCHANTABILITY, 
+# SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND ANY 
+# WARRANTY OR CONDITION OF NON-INFRINGEMENT. IBM SHALL NOT BE LIABLE FOR 
+# ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING 
+# OUT OF THE USE OR OPERATION OF THE SAMPLE SOURCE CODE. IBM HAS NO 
+# OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR 
+# MODIFICATIONS TO THE SAMPLE SOURCE CODE.
+#
+# (C) Copyright IBM Corp. 2005, 2011.
+# All Rights Reserved. Licensed Materials - Property of IBM.
+
+#
+# Very basic means of tracing commands: uncomment the
+# 'puts' command to switch trace on
+#
+proc traceCmd { command } {
+	puts $command
+}
+
+###
+### Creates a Derby XA JDBC provider for WebSphere 6.1 servers
+###
+proc createDerbyXAJDBCProvider { name } {
+
+    # As requested by the user
+    set PROVIDER_NAME "$name"
+
+    # This is true for all non-XA Cloudscape resources
+    set PROVIDER_CLASSPATH "\${DERBY_JDBC_DRIVER_PATH}/derby.jar"
+    set IMPL_CLASS_NAME "org.apache.derby.jdbc.EmbeddedXADataSource"
+    
+    # Execute the command
+    set COMMAND "createJDBCProvider {$PROVIDER_NAME} {$IMPL_CLASS_NAME}  {true} {$PROVIDER_CLASSPATH}"
+    traceCmd $COMMAND
+    eval $COMMAND
+}
+
+###
+### Creates a JDBC provider for WebSphere 6.1 servers
+###
+proc createJDBCProvider { name implClassName xa classpath } {
+
+    global AdminConfig
+
+    # Convenient variable decls for the provider
+    set PROVIDER_NAME "$name"
+    set PROVIDER_IMPL_CLASS "$implClassName"
+    set PROVIDER_IS_XA "$xa"
+    set CLASSPATH "$classpath"
+
+    ### You shouldn't need to change things below here ###
+    set PROVIDER_DESCRIPTION "wsadmin-generated JDBC provider ($PROVIDER_NAME)"
+
+    ### Real work starts here ###
+
+    # Get the parent of this provider (a server)
+    regexp {.+(\([^\(]+\))} [$AdminConfig list Server] match PARENT
+    traceCmd "JDBC provider parent is $PARENT"
+
+    # Configure the native path
+    set NATIVE_PATH ""
+
+    # Configure the resource
+    set PROPERTIES "{name {$PROVIDER_NAME}}"
+    set PROPERTIES "$PROPERTIES {description {$PROVIDER_DESCRIPTION}}"
+    set PROPERTIES "$PROPERTIES {implementationClassName {$PROVIDER_IMPL_CLASS}}"
+    set PROPERTIES "$PROPERTIES {name {$PROVIDER_NAME}}"
+    set PROPERTIES "$PROPERTIES {nativepath {$NATIVE_PATH}}"
+    set PROPERTIES "$PROPERTIES {xa {$PROVIDER_IS_XA}}"
+    set PROPERTIES "$PROPERTIES {classpath \"$CLASSPATH\"}"
+
+    # Execute the command
+    set COMMAND "$AdminConfig create JDBCProvider $PARENT {$PROPERTIES}"
+    traceCmd $COMMAND
+    eval $COMMAND
+}
+
+
+###
+### Creates a generic Derby datasource for WebSphere 6.1 servers
+###
+proc createDerbyDataSource { jdbcProvider name jndiName dbName } {
+
+    global AdminConfig
+
+    # As requested by the user
+    set DS_NAME "$name"
+    set DS_JNDI_NAME "$jndiName"
+    set DATABASE_NAME "$dbName"
+
+    # Get the JDBC provider
+    set JDBC_PROVIDER "[getJDBCProvider $jdbcProvider]"
+    traceCmd "JDBC provider is $JDBC_PROVIDER"
+
+   
+    set DS_HELPER_CLASSNAME "com.ibm.websphere.rsadapter.DerbyDataStoreHelper"
+
+    # Execute the generic create datasource command
+    set COMMAND "createDataSource70 {$JDBC_PROVIDER} {$DATABASE_NAME} {$DS_NAME} {$DS_JNDI_NAME} {$DS_HELPER_CLASSNAME}"
+    traceCmd $COMMAND
+    eval $COMMAND
+}
+
+###
+### Creates a datasource for WebSphere 6.1 servers.
+###
+proc createDataSource70 { jdbcProvider dbName dsName jndiName helperClassname } {
+
+    global AdminConfig
+
+    # Generic variables
+    set JDBC_PROVIDER $jdbcProvider
+
+    # Convenient variable decls for the datasource
+    set DATABASE_NAME "$dbName"
+    set DATASOURCE_NAME "$dsName"
+    set JNDI_NAME "$jndiName"
+    set HELPER_CLASSNAME "$helperClassname"
+
+    ### Probably don't need to reconfigure anything below here, but located here for convenience ###
+
+    # Get the relational resource adapter
+    regexp {(\([^\)]+\))} "[getRRA]" match PROP_RRA
+    traceCmd "RelResAdapter is $PROP_RRA"
+
+    # Configure the DS attributes
+    set AUTH_DATA_ALIAS ""
+    set AUTH_MECHANISM_PREF "BASIC_PASSWORD"
+    set CATEGORY ""
+    set DESCRIPTION "New JDBC Datasource"
+    set STATEMENT_CACHE_SIZE "10"
+
+    # Configure the DS property set
+    set SHUTDOWN_DATABASE ""
+    set CONNECTION_ATTR ""
+    set SHOULD_CREATE_DATABASE ""
+    set MULTI_THREAD_DETECT "false"
+    set PRE_TEST_SQL_STRING ""
+
+    # Configuration of the DS mapping
+    set MAPPING_CONFIG_ALIAS "DefaultPrincipalMapping"
+    set MAPPING_AUTH_DATA_ALIAS ""
+
+
+    # Configuration of the connection pool
+    set CONN_TIMEOUT "1800"
+    set CONN_MAX_CONN "10"
+    set CONN_MIN_CONN "1"
+    set CONN_REAP_TIME "180"
+    set CONN_UNUSED_TIMEOUT "1800"
+    set CONN_AGED_TIMEOUT "0"
+    set CONN_PURGE_POLICY "EntirePool"
+
+    ### Real work starts here ###
+
+    # Configure the data source itself
+    set DS_PROPERTIES "{authDataAlias {$AUTH_DATA_ALIAS}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {authMechanismPreference {$AUTH_MECHANISM_PREF}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {category {$CATEGORY}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {datasourceHelperClassname {$HELPER_CLASSNAME}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {description {$DESCRIPTION}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {jndiName {$JNDI_NAME}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {name {$DATASOURCE_NAME}}"
+    set DS_PROPERTIES "$DS_PROPERTIES {statementCacheSize {$STATEMENT_CACHE_SIZE}}" 
+#    set DS_PROPERTIES "$DS_PROPERTIES {relationalResourceAdapter $PROP_RRA}"
+   
+    # Create the property set for the database name
+    set PROP_DATABASE_NAME "{name {databaseName}}"
+    set PROP_DATABASE_NAME "$PROP_DATABASE_NAME {type {java.lang.String}}"
+    set PROP_DATABASE_NAME "$PROP_DATABASE_NAME {value {$DATABASE_NAME}}" 
+    set PROP_DATABASE_NAME "$PROP_DATABASE_NAME {required {true}}"
+
+    # Create the shutdown database flag ( "" )
+    set PROP_SHUTDOWN_DATABASE "{name {shutdownDatabase}}"
+    set PROP_SHUTDOWN_DATABASE "$PROP_SHUTDOWN_DATABASE {type {java.lang.String}}"
+    set PROP_SHUTDOWN_DATABASE "$PROP_SHUTDOWN_DATABASE {value {$SHUTDOWN_DATABASE}}"
+
+    # Create the datasource name ( "" )
+    set PROP_DATASOURCE_NAME "{name {dataSourceName}}"
+    set PROP_DATASOURCE_NAME "$PROP_DATASOURCE_NAME {type {java.lang.String}}"
+    set PROP_DATASOURCE_NAME "$PROP_DATASOURCE_NAME {value {$DATASOURCE_NAME}}"
+
+    # Create the description ( "" )
+    set PROP_DESCRIPTION "{name {description}}"
+    set PROP_DESCRIPTION "$PROP_DESCRIPTION {type {java.lang.String}}"
+    set PROP_DESCRIPTION "$PROP_DESCRIPTION {value {}}"
+
+    # Create the connection attributes ( "" )
+    set PROP_CONN_ATTR "{name {connectionAttributes}}"
+    set PROP_CONN_ATTR "$PROP_CONN_ATTR {type {java.lang.String}}"
+    set PROP_CONN_ATTR "$PROP_CONN_ATTR {value {$CONNECTION_ATTR}}"
+
+    # Create the property set for the create database flag ( "" )
+    set PROP_CREATE_DATABASE "{name {createDatabase}}"
+    set PROP_CREATE_DATABASE "$PROP_CREATE_DATABASE {type {java.lang.String}}"
+    set PROP_CREATE_DATABASE "$PROP_CREATE_DATABASE {value {$SHOULD_CREATE_DATABASE}}"
+
+    # Create the multi-threaded access detection flag ( "false" )
+    set PROP_MULTI_THREAD "{name {enableMultithreadedAccessDetection}}"
+    set PROP_MULTI_THREAD "$PROP_MULTI_THREAD {type {java.lang.Boolean}}"
+    set PROP_MULTI_THREAD "$PROP_MULTI_THREAD {value {$MULTI_THREAD_DETECT}}"
+
+    # Create the preTest SQL String flag ( "" )
+    set PROP_SQL_STRING "{name {preTestSQLString}}"
+    set PROP_SQL_STRING "$PROP_SQL_STRING {type {java.lang.String}}"
+    set PROP_SQL_STRING "$PROP_SQL_STRING {value {$PRE_TEST_SQL_STRING}}"
+    set PROP_SQL_STRING "$PROP_SQL_STRING {required {false}}"
+
+    # Bundle these into a larger object
+    set PROP_ALL "{$PROP_DATABASE_NAME}"
+    set PROP_ALL "$PROP_ALL {$PROP_SHUTDOWN_DATABASE}"
+    set PROP_ALL "$PROP_ALL {$PROP_DATASOURCE_NAME}"
+    set PROP_ALL "$PROP_ALL {$PROP_DESCRIPTION}"
+    set PROP_ALL "$PROP_ALL {$PROP_CONN_ATTR}"
+    set PROP_ALL "$PROP_ALL {$PROP_CREATE_DATABASE}"
+    set PROP_ALL "$PROP_ALL {$PROP_MULTI_THREAD}"
+    set PROP_ALL "$PROP_ALL {$PROP_SQL_STRING}"
+    set PROP_ALL "{resourceProperties {$PROP_ALL}}"
+
+    # Create the connection pool
+    set CONN_POOL "{connectionTimeout {$CONN_TIMEOUT}}"
+    set CONN_POOL "$CONN_POOL {maxConnections {$CONN_MAX_CONN}}"
+    set CONN_POOL "$CONN_POOL {minConnections {$CONN_MIN_CONN}}"
+    set CONN_POOL "$CONN_POOL {reapTime {$CONN_REAP_TIME}}"
+    set CONN_POOL "$CONN_POOL {unusedTimeout {$CONN_UNUSED_TIMEOUT}}"
+    set CONN_POOL "$CONN_POOL {agedTimeout {$CONN_AGED_TIMEOUT}}"
+    set CONN_POOL "$CONN_POOL {purgePolicy {$CONN_PURGE_POLICY}}"
+
+    # Create the mapping object
+    set MAPPING "{mappingConfigAlias {$MAPPING_CONFIG_ALIAS}}"
+    set MAPPING "$MAPPING {authDataAlias {$MAPPING_AUTH_DATA_ALIAS}}"
+
+    # Finally, construct the whole configuration set
+    set PROPERTIES "$DS_PROPERTIES"
+    set PROPERTIES "$PROPERTIES {connectionPool {$CONN_POOL}}"
+    set PROPERTIES "$PROPERTIES {mapping {$MAPPING}}"
+    set PROPERTIES "$PROPERTIES {propertySet {$PROP_ALL}}"
+    set PROPERTIES "{$PROPERTIES}"
+
+    # Execute the create command
+    set COMMAND "$AdminConfig create DataSource $JDBC_PROVIDER $PROPERTIES"
+    traceCmd $COMMAND
+    eval $COMMAND
+}
+
+
+###
+### Finds a datasource with a given name
+###
+proc getJDBCProvider { name } {
+
+    global AdminConfig
+
+    puts "Trying to match $name"
+
+    # Get all JDBC Providers
+    foreach jdbcp [$AdminConfig list JDBCProvider] {
+
+	puts $jdbcp
+
+	# Match on anything, followed by a matching set of paren NOT containing further paren
+	# Save the "anything" section to match with
+	regexp {(.+)\([^\(]+\)} $jdbcp match jdbcpName
+	puts $jdbcpName
+
+	# Now check if this matches
+	if {"$jdbcpName" == "$name"} {
+	    # Same pattern as above, but this time extract the second part
+	    regexp {.+(\([^\(]+\))} $jdbcp match PROVIDER
+	    puts "Returning $PROVIDER"
+	    return $PROVIDER
+	}
+    }
+}
+
+proc getRRA { } {
+
+    global AdminConfig
+
+    foreach j2cra [$AdminConfig list J2CResourceAdapter] {
+	if { ! [regexp {(/servers/)+} $j2cra] } {
+	    return $j2cra
+	}
+    }
+}
+
+
+#####
+##### Main
+#####
+
+createDerbyXAJDBCProvider "WSBA Sample Derby JDBC Provider"
+
+createDerbyDataSource "WSBA Sample Derby JDBC Provider" "WSBA Sample Derby datasource" "jdbc/WSBASampleDS" "\${APP_INSTALL_ROOT}/\${WAS_CELL_NAME}/WSBASample.ear/database"
+
+$AdminTask createPolicySet {-policySet "WSBA policy set" -description }  
+
+$AdminTask addPolicyType {-policySet "WSBA policy set" -policyType WSTransaction}
+
+set asslist [$AdminConfig list CompensationService]; foreach as $asslist {$AdminConfig modify $as {{enable true}}};
+
+$AdminConfig save

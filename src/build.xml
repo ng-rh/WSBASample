@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+
+<!-- 
+  COPYRIGHT LICENSE: This information contains sample code provided in 
+  source code form. You may copy, modify, and distribute these sample 
+  programs in any form without payment to IBM for the purposes of 
+  developing, using, marketing or distributing application programs 
+  conforming to the application programming interface for the operating 
+  platform for which the sample code is written. Notwithstanding anything 
+  to the contrary, IBM PROVIDES THE SAMPLE SOURCE CODE ON AN "AS IS" BASIS 
+  AND IBM DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, BUT NOT 
+  LIMITED TO, ANY IMPLIED WARRANTIES OR CONDITIONS OF MERCHANTABILITY, 
+  SATISFACTORY QUALITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND ANY 
+  WARRANTY OR CONDITION OF NON-INFRINGEMENT. IBM SHALL NOT BE LIABLE FOR 
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES ARISING 
+  OUT OF THE USE OR OPERATION OF THE SAMPLE SOURCE CODE. IBM HAS NO 
+  OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR 
+  MODIFICATIONS TO THE SAMPLE SOURCE CODE.
+ 
+  (C) Copyright IBM Corp. 2005, 2011.
+  All Rights Reserved. Licensed Materials - Property of IBM.
+
+  <target name="all" depends="init, clean, makeClient,makeWarJar, makeEar, document"/>
+-->
+
+<project name="WSBASample" default="all" xmlns:mantis="antlib:com.ibm.mantis">
+  <target name="all" depends="init, clean, makeEJBJar, makeWarJar, makeEar"/>
+
+  <target name="init" depends="clean">
+    <tstamp/>
+    <echo message="WSBASample.ear build started..."/>
+    <mkdir dir="bld/WSBASample"/>
+    <mkdir dir="installableApps"/>
+    <mkdir dir="src/database/log"/>
+
+    <echo message="WSBASample.ear defining a task that generates java bindings..."/>
+    <taskdef name="WSDL2JavaTask" 
+             classname="com.ibm.websphere.ant.tasks.WSDL2Java">
+           <classpath>
+               <pathelement path="${prereq.classpath}" />
+               <pathelement path="wsdl" />
+               <pathelement path="src" />
+           </classpath>
+    </taskdef>
+    <taskdef name="EndpointEnablerTask" 
+             classname="com.ibm.websphere.ant.tasks.endptEnabler">
+           <classpath>
+               <pathelement path="${prereq.classpath}" />
+           </classpath>
+    </taskdef>
+
+     <taskdef name="wsimport" classname="com.sun.tools.ws.ant.WsImport">
+     <!-- taskdef name="wsimport" classname="com.ibm.jtc.jax.tools.ws.ant.WsImport" -->
+              <!-- classpath refid="mantis.prereq.classpath"/ -->
+              <classpath>
+                 <pathelement path="${prereq.classpath}" />
+              </classpath>
+     </taskdef>
+
+     <mkdir dir="bld/WSBASample/WSBASampleEJB"/>
+     <mkdir dir="bld/WSBASample/wsimport/src"/>
+
+     <echo message="wsimport of HotelProviderA"/>
+     <wsimport destdir="bld/WSBASample/WSBASampleEJB"
+               sourcedestdir="bld/WSBASample/wsimport/src"
+               keep="true" 
+               debug="true"
+               verbose="true"
+               extension="true"
+               wsdl="${basedir}/src/WSBASampleEJB/META-INF/wsdl/HotelProviderA.wsdl">
+     </wsimport>
+
+     <echo message="wsimport of HotelProviderB"/>
+     <wsimport destdir="bld/WSBASample/WSBASampleEJB"
+               sourcedestdir="bld/WSBASample/wsimport/src"
+               keep="true" 
+               debug="true"
+               verbose="true"
+               extension="true"
+               wsdl="${basedir}/src/WSBASampleEJB/META-INF/wsdl/HotelProviderB.wsdl">
+     </wsimport>
+
+
+  </target>
+
+  <target name="clean">
+    <tstamp/>
+    <echo message="WSBASample.ear Cleaning..."/>
+    <delete file="installableApps/WSBASample/WSBASample.ear"/>
+    <delete file="installableApps/WSBASample/WSBASampleEJB.jar"/>
+    <delete file="installableApps/WSBASample/WSBASampleWeb.war"/>
+    <delete quiet="true" failonerror="false">
+      <fileset dir="bld/WSBASample"/>
+    </delete>
+  </target>
+
+  <target name="makeEJBJar" depends="init">
+    <echo message="Building the EJB component piece of WSBASample.ear..."/>
+    <ant antfile="src/WSBASampleEJB/build.xml" dir="${basedir}" inheritRefs="true"/>
+  </target>
+
+  <target name="makeWarJar" depends="makeEJBJar">
+    <tstamp/>
+    <echo message="Building the Web component piece of WSBASample.ear..."/>
+    <ant antfile="src/WSBASampleWeb/build.xml" dir="${basedir}" inheritRefs="true"/>
+  </target>
+
+  <target name="makeEar" depends="makeWarJar">
+
+    <tstamp/>
+
+    <echo message="Creating the WSBASample.ear file..."/>
+
+    <ear earfile="installableApps/WSBASample.ear" 
+         appxml="src/META-INF/application.xml">
+      <fileset dir="installableApps" includes="WSBASampleEJB.jar"/>
+      <fileset dir="installableApps" includes="WSBASampleWeb.war"/>
+      <fileset dir="src" includes="database/**/*"/>
+    </ear>
+	
+    <echo message="Running EndpointEnabler on WSBASample.ear..."/>
+
+      <EndpointEnablerTask earfile="${basedir}/installableApps/WSBASample.ear">
+         <property key="WSBASample.http.routerModuleName" value="WSBASampleWeb.war"/>
+         <property key="WSBASample.http.contextRoot" value="/WSBASampleWeb"/>
+      </EndpointEnablerTask>
+
+  </target>
+</project>

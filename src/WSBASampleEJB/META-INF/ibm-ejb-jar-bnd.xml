@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar-bnd
+	xmlns="http://websphere.ibm.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee 
+	http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-bnd_1_0.xsd" version="1.0">
+   <session name="TravelAgent"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="FlightProviderA"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="FlightProviderB"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="HotelProviderA"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="HotelProviderB"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="FlightProviderAEMail"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="FlightProviderBEMail"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="HotelProviderAEMail"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="HotelProviderBEMail"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="MockEMailServer"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+   <session name="CustomerDataHelper"> 
+       <resource-ref name="WSBASampleDB" binding-name="jdbc/WSBASampleDS"/> 
+   </session> 
+</ejb-jar-bnd>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.ibm.com/websphere/sample/wsba" xmlns:impl="http://www.ibm.com/websphere/sample/wsba" xmlns:intf="http://www.ibm.com/websphere/sample/wsba" xmlns:tns2="http://utils.wsba.ws.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+ <wsdl:types>
+  <schema targetNamespace="http://www.ibm.com/websphere/sample/wsba" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://www.ibm.com/websphere/sample/wsba" xmlns:intf="http://www.ibm.com/websphere/sample/wsba" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <element name="scenarioBResponse">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="scenarioB">
+    <complexType>
+     <sequence>
+      <element name="id" nillable="true" type="xsd:string"/>
+      <element name="compensate" type="xsd:boolean"/>
+      <element name="bookingId" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema targetNamespace="http://utils.wsba.ws.ibm.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://www.ibm.com/websphere/sample/wsba" xmlns:intf="http://www.ibm.com/websphere/sample/wsba" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <complexType name="BusinessException">
+    <sequence/>
+   </complexType>
+   <element name="BusinessException" nillable="true" type="tns2:BusinessException"/>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="BusinessException">
+
+      <wsdl:part name="fault" element="tns2:BusinessException"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="scenarioBResponse">
+
+      <wsdl:part element="impl:scenarioBResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="scenarioBRequest">
+
+      <wsdl:part element="impl:scenarioB" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="HotelProviderA">
+
+      <wsdl:operation name="scenarioB">
+
+         <wsdl:input message="impl:scenarioBRequest" name="scenarioBRequest"/>
+
+         <wsdl:output message="impl:scenarioBResponse" name="scenarioBResponse"/>
+
+         <wsdl:fault message="impl:BusinessException" name="BusinessException"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="HotelProviderASoapBinding" type="impl:HotelProviderA">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="scenarioB">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="scenarioBRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="scenarioBResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+         <wsdl:fault name="BusinessException">
+
+            <wsdlsoap:fault name="BusinessException" use="literal"/>
+
+         </wsdl:fault>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="HotelProviderAService">
+
+      <wsdl:port binding="impl:HotelProviderASoapBinding" name="HotelProviderA">
+
+         <wsdlsoap:address location="http://localhost:9080/WSBASampleEJB/services/HotelProviderA"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>
